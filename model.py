@@ -114,8 +114,11 @@ def check_winner(board):
     else:
         return 0
 
-# Step 11 - board_is_full (not yet solved)
-# TODO: implement
+# Step 11 - board_is_full
+def board_is_full(board):
+    # TODO: return True when no column has an empty slot left
+    top_row = board[0, :]
+    return np.all(top_row != 0)
 
 # Step 12 - is_terminal (not yet solved)
 # TODO: implement
