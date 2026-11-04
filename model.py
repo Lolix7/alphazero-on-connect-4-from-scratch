@@ -152,8 +152,10 @@ def encode_board(board, current_player):
     b = np.where(board == other_player(current_player), 1., 0.).astype(dtype = 'f')
     return np.array([a,b])
 
-# Step 16 - board_to_torch_tensor (not yet solved)
-# TODO: implement
+# Step 16 - board_to_torch_tensor
+def board_to_torch_tensor(board, current_player):
+    # TODO: encode the board and return it as a float32 torch tensor of shape (1, 2, 6, 7).
+    return torch.from_numpy(encode_board(board,current_player)).unsqueeze(0).float()
 
 # Step 17 - init_conv_backbone (not yet solved)
 # TODO: implement
