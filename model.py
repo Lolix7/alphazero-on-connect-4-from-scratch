@@ -120,8 +120,16 @@ def board_is_full(board):
     top_row = board[0, :]
     return np.all(top_row != 0)
 
-# Step 12 - is_terminal (not yet solved)
-# TODO: implement
+# Step 12 - is_terminal
+def is_terminal(board):
+    # TODO: return (done, winner) using check_winner and board_is_full.
+    
+    if board_is_full(board):
+        
+        return True, check_winner(board)
+    if check_winner(board) != 0:
+        return True, check_winner(board)
+    return False, 0
 
 # Step 13 - other_player (not yet solved)
 # TODO: implement
