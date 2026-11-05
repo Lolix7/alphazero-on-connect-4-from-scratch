@@ -250,8 +250,15 @@ def masked_policy_logits(logits, mask):
     logits = torch.where(mask, logits, -torch.inf)
     return logits
 
-# Step 24 - masked_log_softmax (not yet solved)
-# TODO: implement
+# Step 24 - masked_log_softmax
+import torch
+
+def masked_log_softmax(logits, mask):
+    """Log-softmax of logits with illegal columns (mask=False) forced to -inf."""
+    # TODO: mask out illegal columns, then apply log-softmax over the last dim.
+    m = masked_policy_logits(logits,mask)
+    s = torch.nn.LogSoftmax(dim=-1)
+    return s(m)
 
 # Step 25 - sample_action_from_policy (not yet solved)
 # TODO: implement
