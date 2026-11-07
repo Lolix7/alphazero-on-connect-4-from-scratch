@@ -322,8 +322,17 @@ def select_best_child(node, legal_actions, c_puct=1.5):
         key=lambda item: ucb_score(node, item[1], c_puct=c_puct)
     )
 
-# Step 31 - select_leaf (not yet solved)
-# TODO: implement
+# Step 31 - select_leaf
+def select_leaf(root, c_puct):
+    # TODO: walk down the MCTS tree picking the best PUCT child until a non-expanded node is reached
+    if not root['children']:
+        return root
+    action, child = select_best_child(
+        root,
+        list(root['children'].keys()),
+        c_puct
+    )
+    return select_leaf(child, c_puct=c_puct)
 
 # Step 32 - evaluate_with_network (not yet solved)
 # TODO: implement
