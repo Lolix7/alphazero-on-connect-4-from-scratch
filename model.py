@@ -381,8 +381,33 @@ def backup_value(leaf, value):
     if parent is not None:
         return backup_value(parent, -value)
 
-# Step 35 - run_one_simulation (not yet solved)
-# TODO: implement
+# Step 35 - run_one_simulation
+def run_one_simulation(root, net, c_puct):
+    
+    # TODO: run one MCTS simulation: select a leaf, evaluate, expand if non-terminal, backup.
+
+    node = select_leaf(root, c_puct)
+
+    if 'is_expanded' not in node:
+        node['is_expanded'] = False
+
+    board = node['board']
+    to_play = node['to_play']
+
+    done, winner = is_terminal(board)
+
+    if done:
+        if winner == 0:
+            value = 0.0
+        elif winner == to_play:
+            value = 1.0
+        else:
+            value = -1.0
+    else:
+        priors, value = evaluate_with_network(net, board, to_play)
+        expand_node(node, priors)
+
+    backup_value(node, value)
 
 # Step 36 - run_mcts (not yet solved)
 # TODO: implement
