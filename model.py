@@ -517,8 +517,8 @@ import torch
 def policy_loss_cross_entropy(predicted_log_probs, target_policy):
     """Cross-entropy between MCTS target policy and network log-probs. Returns scalar tensor."""
     # TODO: compute -sum(target * log_probs) per row, then average over the batch
-    p = predicted_log_probs*target_policy
-    s = -torch.sum(p , axis=1)
+    p = torch.where(target_policy > 0, predicted_log_probs, 0) * target_policy
+    s = -torch.sum(p, axis=1)
     return torch.mean(s)
 
 # Step 45 - l2_regularization_loss
@@ -593,7 +593,7 @@ def training_epoch(net, optimizer, buffer, batch_size, policy_weight=1.0, value_
     L2 = []
     C = []
     for batch in iterate_minibatches(buffer, batch_size,seed = seed):
-        training = training_step(net, optimizer, batch)
+        training = training_step(net, optimizer, batch,policy_weight=policy_weight,value_weight=value_weight,l2_weight=l2_weight)
         pL.append(training['policy'])
         vL.append(training['value'])
         L2.append(training['l2'])
@@ -677,5 +677,5 @@ def evaluate_against_random(net, num_matches, seed=None):
     def greedy_agent(state, to_play):
         return greedy_agent_action(net, state, to_play)
     
-    return match_win_rate(random_agent, greedy_agent, num_matches)
+    return match_win_rate(greedy_agent, random_agent, num_matches)
 
