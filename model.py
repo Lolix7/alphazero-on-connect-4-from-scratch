@@ -444,8 +444,13 @@ def visit_count_policy(root, temperature=1.0):
             action[i] = child**(1/temperature)/s
     return action
 
-# Step 38 - mcts_choose_action (not yet solved)
-# TODO: implement
+# Step 38 - mcts_choose_action
+def mcts_choose_action(state, to_play, net, num_simulations, c_puct, temperature=1.0):
+    # TODO: Run MCTS at the given state and return (action, visit-count policy vector).
+    node = run_mcts(state, to_play, net, num_simulations, c_puct)
+    visited_count = visit_count_policy(node, temperature=temperature)
+    action = sample_action_from_policy(torch.tensor(visited_count), action_mask(state))
+    return action, visited_count
 
 # Step 39 - record_self_play_step (not yet solved)
 # TODO: implement
