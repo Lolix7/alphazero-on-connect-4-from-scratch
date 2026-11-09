@@ -452,8 +452,12 @@ def mcts_choose_action(state, to_play, net, num_simulations, c_puct, temperature
     action = sample_action_from_policy(torch.tensor(visited_count), action_mask(state))
     return action, visited_count
 
-# Step 39 - record_self_play_step (not yet solved)
-# TODO: implement
+# Step 39 - record_self_play_step
+def record_self_play_step(history, board, policy, to_play):
+    # TODO: append a dict with 'board', 'policy', 'to_play' to history and return history
+    h = dict(board = board.copy(), policy = policy.copy(), to_play = to_play)
+    history.append(h)
+    return history
 
 # Step 40 - play_self_play_game (not yet solved)
 # TODO: implement
