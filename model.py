@@ -558,8 +558,31 @@ def iterate_minibatches(buffer, batch_size, seed=None):
     for i in range(0, len(buffer), batch_size):
         yield buffer[i:i+batch_size]
 
-# Step 49 - training_step (not yet solved)
-# TODO: implement
+# Step 49 - training_step
+def training_step(net, optimizer, minibatch, policy_weight=1.0, value_weight=1.0, l2_weight=1e-4):
+    # TODO: run forward pass, compute combined AlphaZero loss, backprop, and step optimizer.
+    boards = [b['board'] for b in minibatch]
+    to_plays = [b['to_play'] for b in minibatch]
+    states = encode_batch_states(boards, to_plays)
+    target_policy = torch.tensor(np.array([b['policy'] for b in minibatch]),dtype=torch.float32)
+
+    target_value = torch.tensor([b['value'] for b in minibatch], dtype=torch.float32)
+    logits, values = policy_value_forward(net, states)
+
+    masks = torch.tensor(np.array([action_mask(board) for board in boards]),dtype=torch.bool)
+
+    log_probs = masked_log_softmax(logits, masks)
+
+    loss, parts = combined_loss(log_probs, values, target_policy, target_value, net, policy_weight = policy_weight, value_weight = value_weight, l2_weight = l2_weight)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    return {
+        'total': float(loss.item()),
+        'policy': float(parts['policy'].item()),
+        'value': float(parts['value'].item()),
+        'l2': float(parts['l2'].item())
+    }
 
 # Step 50 - training_epoch (not yet solved)
 # TODO: implement
