@@ -422,8 +422,27 @@ def run_mcts(state, to_play, net, num_simulations, c_puct):
     
     return root
 
-# Step 37 - visit_count_policy (not yet solved)
-# TODO: implement
+# Step 37 - visit_count_policy
+def visit_count_policy(root, temperature=1.0):
+    # TODO: convert root child visit counts into a length-7 probability vector over columns
+    
+    action = np.array([0.0]*7)
+    count = np.zeros(7)
+    for i, child in root['children'].items():
+        count[i]=child['visit_count']
+    if temperature == 0:
+        i = np.argmax(count)
+        action[i] = 1.0
+    elif count @ count == 0:
+        return np.array([1/count.shape[0] for i in range(count.shape[0])])
+    else:        
+        s = 0.0
+        for i in count:
+            s += i**(1/temperature)
+        
+        for i, child in enumerate(count):
+            action[i] = child**(1/temperature)/s
+    return action
 
 # Step 38 - mcts_choose_action (not yet solved)
 # TODO: implement
