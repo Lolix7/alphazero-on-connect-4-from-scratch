@@ -530,8 +530,14 @@ def l2_regularization_loss(net):
             t += torch.linalg.norm(param)**2
     return t
 
-# Step 46 - combined_loss (not yet solved)
-# TODO: implement
+# Step 46 - combined_loss
+def combined_loss(predicted_log_probs, predicted_values, target_policy, target_values, net, policy_weight=1.0, value_weight=1.0, l2_weight=1e-4):
+    # TODO: combine policy CE, value MSE, and L2 reg into a single weighted training loss.
+    vL = value_loss_mse(predicted_values, target_values)
+    pL = policy_loss_cross_entropy(predicted_log_probs, target_policy)
+    l2L = l2_regularization_loss(net)
+    L = vL*value_weight + pL * policy_weight + l2L*l2_weight
+    return L, {'policy': pL, 'value':vL, 'l2': l2L}
 
 # Step 47 - encode_batch_states (not yet solved)
 # TODO: implement
