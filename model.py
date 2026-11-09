@@ -657,8 +657,16 @@ def play_one_match(agent_one, agent_two, starting_player=1):
         board, done, winner, to_play = step_env(board, action, to_play)
     return winner
 
-# Step 56 - match_win_rate (not yet solved)
-# TODO: implement
+# Step 56 - match_win_rate
+def match_win_rate(agent_one, agent_two, num_matches, alternate_starts=True):
+    # TODO: play num_matches games and tally wins, losses, draws for agent_one
+    win = []
+    starting_player = 1
+    for _ in range(num_matches):
+        win.append(play_one_match(agent_one,agent_two, starting_player = starting_player))
+        if alternate_starts:
+            starting_player = 2 if starting_player == 1 else 1
+    return dict(wins=win.count(1), losses=win.count(2), draws=win.count(0))
 
 # Step 57 - evaluate_against_random (not yet solved)
 # TODO: implement
